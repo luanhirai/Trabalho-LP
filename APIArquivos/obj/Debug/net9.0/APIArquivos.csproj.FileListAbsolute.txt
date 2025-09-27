@@ -268,3 +268,4 @@ H:\faculdade\6 termo\lp\APIArquivos\APIArquivos\APIArquivos\obj\Debug\net9.0\API
 H:\faculdade\6 termo\lp\APIArquivos\APIArquivos\APIArquivos\obj\Debug\net9.0\APIArquivos.pdb
 H:\faculdade\6 termo\lp\APIArquivos\APIArquivos\APIArquivos\obj\Debug\net9.0\APIArquivos.genruntimeconfig.cache
 H:\faculdade\6 termo\lp\APIArquivos\APIArquivos\APIArquivos\obj\Debug\net9.0\ref\APIArquivos.dll
+H:\faculdade\6 termo\lp\APIArquivos\APIArquivos\APIArquivos\obj\Debug\net9.0\APIArquivos.sourcelink.json

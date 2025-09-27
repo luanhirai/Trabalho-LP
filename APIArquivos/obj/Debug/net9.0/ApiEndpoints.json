@@ -131,6 +131,43 @@
     ]
   },
   {
+    "ContainingType": "APIArquivos.Controllers.AlunosController",
+    "Method": "UploadFoto",
+    "RelativePath": "api/Alunos/{id}/foto",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "foto",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIArquivos.Controllers.AlunosController",
+    "Method": "GetFotoBase64",
+    "RelativePath": "api/Alunos/{id}/foto",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APIArquivos.Controllers.CidadesController",
     "Method": "GetAllCity",
     "RelativePath": "api/cidades",

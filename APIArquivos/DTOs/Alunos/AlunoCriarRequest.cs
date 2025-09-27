@@ -3,6 +3,5 @@
     public class AlunoCriarRequest
     {
         public string Nome { get; set; }
-
     }
 }

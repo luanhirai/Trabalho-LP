@@ -1,6 +1,7 @@
 ﻿
 using APIArquivos.DTOs.Alunos;
 using ArquivosLibrary.Entidades;
+using ArquivosLibrary.Repository;
 using ArquivosLibrary.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -115,7 +116,8 @@ namespace APIArquivos.Controllers
                     {
                         Id = aluno.Id,
                         Nome = aluno.Nome,
-                        RA = aluno.RA
+                        RA = aluno.RA,
+                        ImagemUrl= aluno.ImagemUrl
                     });
                 }
 
@@ -127,6 +129,57 @@ namespace APIArquivos.Controllers
                 return StatusCode(500, $"Erro interno: {ex.Message}");
             }
         }
+
+
+        [HttpPost("{id}/foto")]
+        public async Task<IActionResult> UploadFoto(int id, IFormFile foto)
+        {
+            if (foto == null || foto.Length == 0)
+                return BadRequest("Arquivo inválido.");
+
+            var storage = Path.Combine(Directory.GetCurrentDirectory(), "Storage");
+            if (!Directory.Exists(storage))
+                Directory.CreateDirectory(storage);
+
+            var caminhoArquivo = Path.Combine(storage, $"{id}{Path.GetExtension(foto.FileName)}");
+
+            using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
+            {
+                await foto.CopyToAsync(stream);
+            }
+
+            var aluno = await _alunosService.ObterAlunoPorIdAsync(id);
+            if (aluno == null)
+                return NotFound("Aluno não encontrado.");
+
+
+            var result = await _alunosService.AtualizarFotoAsync(id, caminhoArquivo);
+
+            if (!result)
+                return StatusCode(500, "Erro ao salvar o caminho da foto no banco.");
+
+            return Ok("Foto enviada com sucesso.");
+        }
+
+
+
+
+        [HttpGet("{id}/foto")]
+        public async Task<IActionResult> GetFotoBase64(int id)
+        {
+            var aluno = await _alunosService.ObterAlunoPorIdAsync(id);
+            if (aluno == null || string.IsNullOrEmpty(aluno.ImagemUrl))
+                return NotFound("Foto não encontrada.");
+
+            if (!System.IO.File.Exists(aluno.ImagemUrl))
+                return NotFound("Arquivo da foto não encontrado.");
+
+            byte[] bytes = System.IO.File.ReadAllBytes(aluno.ImagemUrl);
+            string base64 = Convert.ToBase64String(bytes);
+
+            return Ok(base64);
+        }
+
 
     }
 }
