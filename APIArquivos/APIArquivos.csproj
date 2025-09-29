@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="Storage\4.png" />
     <None Remove="Storage\5.png" />
+    <None Remove="Storage\6.jfif" />
   </ItemGroup>
 
   <ItemGroup>

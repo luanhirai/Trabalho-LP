@@ -142,8 +142,8 @@ namespace APIArquivos.Controllers
                 Directory.CreateDirectory(storage);
 
             var fileName = $"{id}{Path.GetExtension(foto.FileName)}";
-            var caminhoFisico = Path.Combine(storage, fileName); // caminho real para salvar
-            var caminhoRelativo = Path.Combine("Storage", fileName); // caminho relativo p/ banco
+            var caminhoFisico = Path.Combine(storage, fileName);
+            var caminhoRelativo = Path.Combine("Storage", fileName);
 
             using (var stream = new FileStream(caminhoFisico, FileMode.Create))
             {
@@ -172,7 +172,6 @@ namespace APIArquivos.Controllers
             if (aluno == null || string.IsNullOrEmpty(aluno.ImagemUrl))
                 return NotFound("Foto não encontrada.");
 
-            // monta o caminho físico a partir do relativo salvo no banco
             var caminhoFisico = Path.Combine(Directory.GetCurrentDirectory(), aluno.ImagemUrl.TrimStart('/'));
 
             if (!System.IO.File.Exists(caminhoFisico))
