@@ -141,9 +141,11 @@ namespace APIArquivos.Controllers
             if (!Directory.Exists(storage))
                 Directory.CreateDirectory(storage);
 
-            var caminhoArquivo = Path.Combine(storage, $"{id}{Path.GetExtension(foto.FileName)}");
+            var fileName = $"{id}{Path.GetExtension(foto.FileName)}";
+            var caminhoFisico = Path.Combine(storage, fileName); // caminho real para salvar
+            var caminhoRelativo = Path.Combine("Storage", fileName); // caminho relativo p/ banco
 
-            using (var stream = new FileStream(caminhoArquivo, FileMode.Create))
+            using (var stream = new FileStream(caminhoFisico, FileMode.Create))
             {
                 await foto.CopyToAsync(stream);
             }
@@ -152,8 +154,7 @@ namespace APIArquivos.Controllers
             if (aluno == null)
                 return NotFound("Aluno não encontrado.");
 
-
-            var result = await _alunosService.AtualizarFotoAsync(id, caminhoArquivo);
+            var result = await _alunosService.AtualizarFotoAsync(id, "/" + caminhoRelativo.Replace("\\", "/"));
 
             if (!result)
                 return StatusCode(500, "Erro ao salvar o caminho da foto no banco.");
@@ -171,14 +172,18 @@ namespace APIArquivos.Controllers
             if (aluno == null || string.IsNullOrEmpty(aluno.ImagemUrl))
                 return NotFound("Foto não encontrada.");
 
-            if (!System.IO.File.Exists(aluno.ImagemUrl))
+            // monta o caminho físico a partir do relativo salvo no banco
+            var caminhoFisico = Path.Combine(Directory.GetCurrentDirectory(), aluno.ImagemUrl.TrimStart('/'));
+
+            if (!System.IO.File.Exists(caminhoFisico))
                 return NotFound("Arquivo da foto não encontrado.");
 
-            byte[] bytes = System.IO.File.ReadAllBytes(aluno.ImagemUrl);
+            byte[] bytes = await System.IO.File.ReadAllBytesAsync(caminhoFisico);
             string base64 = Convert.ToBase64String(bytes);
 
             return Ok(base64);
         }
+
 
 
     }
